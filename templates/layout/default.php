@@ -43,6 +43,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <div class="top-nav-links">
             <a target="_blank" rel="noopener" href="https://book.cakephp.org/4/">Documentation</a>
             <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
+            <?php if($_SERVER["REQUEST_URI"] != "http://206.189.202.188:2523/users/login?redirect=%2Farticles%2Fadd"): ?>
+            <?= $this->Html->link("logout",['controller' => 'Users', 'action' => 'Logout']) ?>
+            <?php endif; ?>
         </div>
     </nav>
     <main class="main">

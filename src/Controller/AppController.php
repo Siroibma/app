@@ -18,6 +18,9 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 
+
+use \Firebase\JWT\JWT;
+
 /**
  * Application Controller
  *
@@ -44,10 +47,43 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
-        /*
-         * Enable the following component for recommended CakePHP form protection settings.
-         * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
-         */
-        //$this->loadComponent('FormProtection');
+            // Add this line to check authentication result and lock your site
+        $this->loadComponent('Authentication.Authentication');
+
+        /*$this->loadComponent('Auth', [
+            'storage' => 'Memory',
+            'authenticate' => [
+                'Form' => [
+                    'scope' => ['Users.active' => 1]
+                ],
+                'ADmad/JwtAuth.Jwt' => [
+                    'parameter' => 'token',
+                    'userModel' => 'Users',
+                    'scope' => ['Users.active' => 1],
+                    'fields' => [
+                        'username' => 'id'
+                    ],
+                    'queryDatasource' => true
+                ]
+            ],
+            'unauthorizedRedirect' => false,
+            'checkAuthIn' => 'Controller.initialize'
+        ]);
+        */
+        
+
+
+        
     }
+
+    // in src/Controller/AppController.php
+public function beforeFilter(\Cake\Event\EventInterface $event)
+{
+    parent::beforeFilter($event);
+    // for all controllers in our application, make index and view
+    // actions public, skipping the authentication check.
+    $this->Authentication->addUnauthenticatedActions(['index', 'view']);
+}
+
+    
 }
