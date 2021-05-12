@@ -10,11 +10,13 @@ class ArticlesController extends AppController
         parent::initialize();
 
         $this->loadComponent('Flash'); // Include the FlashComponent
+        $this->viewBuilder()->setOption('serialize', true);
     }
 
     public function index()
     {
         $this->set('articles', $this->Articles->find()->all());
+        
     }
 
     public function view($id)

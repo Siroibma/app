@@ -18,6 +18,9 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 
+
+use \Firebase\JWT\JWT;
+
 /**
  * Application Controller
  *
@@ -46,6 +49,10 @@ class AppController extends Controller
 
             // Add this line to check authentication result and lock your site
         $this->loadComponent('Authentication.Authentication');
+        
+        
+
+
         
     }
 

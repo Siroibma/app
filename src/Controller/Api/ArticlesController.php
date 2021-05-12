@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Controller\Api;
+
+use App\Controller\Api\AppController;
+
+class ArticlesController extends AppController
+{
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Flash');
+
+
+        $this->loadComponent('RequestHandler');
+        $this->Auth->allow(['index', 'view']);
+    }
+
+    public function index()
+    {
+        $this->set('articles', $this->Articles->find()->all());
+        $this->viewBuilder()->setOption('serialize', ['articles']);
+        $this->RequestHandler->renderAs($this, 'json');
+    }
+
+    public function view($id)
+    {
+        $article = $this->Articles->get($id);
+        $this->set(compact('article'));
+        $this->viewBuilder()->setOption('serialize', ['article']);
+        $this->RequestHandler->renderAs($this, 'json');
+    }
+
+    public function add()
+    {
+        $article = $this->Articles->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $article = $this->Articles->patchEntity($article, $this->request->getData());
+            if ($this->Articles->save($article)) {
+                $this->Flash->success(__('Your article has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Unable to add your article.'));
+        }
+        $this->set('article', $article);
+
+        $categories = $this->Articles->Categories->find('treeList')->all();
+        $this->set(compact('categories'));
+
+        $this->viewBuilder()->setOption('serialize', ['article']);
+    }
+    
+    public function edit($id = null)
+    {
+        $article = $this->Articles->get($id);
+        if ($this->request->is(['post', 'put'])) {
+            $this->Articles->patchEntity($article, $this->request->getData());
+            if ($this->Articles->save($article)) {
+                $this->Flash->success(__('Your article has been updated.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Unable to update your article.'));
+        }
+
+        $this->set('article', $article);
+        $this->viewBuilder()->setOption('serialize', ['article']);
+    }
+
+    public function delete($id)
+    {
+        $this->request->allowMethod(['delete']);
+
+        $article = $this->Articles->get($id);
+        if ($this->Articles->delete($article)) {
+            $this->Flash->success(__('The article with id: {0} has been deleted.', h($id)));
+            return $this->redirect(['action' => 'index']);
+        }
+        $this->viewBuilder()->setOption('serialize', ['article']);
+    }
+}
