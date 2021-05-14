@@ -23,6 +23,21 @@
 
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
+
+$routes->prefix('api', function (RouteBuilder $builder) {
+         // No $builder->applyMiddleware() here.
+         
+         // Parse specified extensions from URLs
+         $builder->setExtensions(['json', 'xml']);
+         $builder->resources('Articles');
+         $builder->resources('Users');
+         $builder->connect('/users/register', ['controller' => 'Users', 'action' => 'add, login', 'prefix' => 'api']);
+         $builder->fallbacks('InflectedRoute');
+
+         
+         // Connect API actions here.
+});
 
 /*
  * The default class to use for all routes
@@ -49,13 +64,25 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, templates/Pages/home.php)...
+     * 
+     * 
      */
+
+    $builder->setExtensions(['json', 'xml']);
+
+    $builder->resources('Articles');
+
+
+
+
     $builder->connect('/', ['controller' => 'Articles', 'action' => 'index']);
+    
 
     /*
      * ...and connect the rest of 'Pages' controller's URLs.
      */
     $builder->connect('/pages/*', 'Pages::display');
+
 
     /*
      * Connect catchall routes for all controllers.
@@ -73,6 +100,8 @@ $routes->scope('/', function (RouteBuilder $builder) {
     $builder->fallbacks();
 });
 
+
+
 /*
  * If you need a different set of middleware or none at all,
  * open new scope and define routes there.
@@ -87,4 +116,12 @@ $routes->scope('/', function (RouteBuilder $builder) {
  *     // Connect API actions here.
  * });
  * ```
+ * 
+ * 
+ * 
  */
+
+
+
+
+
