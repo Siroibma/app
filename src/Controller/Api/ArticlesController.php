@@ -32,7 +32,7 @@ class ArticlesController extends AppController
         $this->RequestHandler->renderAs($this, 'json');
     }
 
-    public function add()
+    /*public function add()
     {
         $article = $this->Articles->newEmptyEntity();
         if ($this->request->is('post')) {
@@ -48,6 +48,28 @@ class ArticlesController extends AppController
         $categories = $this->Articles->Categories->find('treeList')->all();
         $this->set(compact('categories'));
 
+        $this->viewBuilder()->setOption('serialize', ['article']);
+    }
+
+    */
+
+    public function add()
+    {
+        $article = $this->Articles->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $article = $this->Articles->patchEntity($article, $this->request->getData());
+            if ($this->Articles->save($article)) {
+                $this->Flash->success(__('Your article has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Unable to add your article.'));
+        }
+        $this->set('article', $article);
+        // Just added the categories list to be able to choose
+        // one category for an article
+        $categories = $this->Articles->Categories->find('treeList')->all();
+        $this->set(compact('categories'));
+        // Rest-API
         $this->viewBuilder()->setOption('serialize', ['article']);
     }
     

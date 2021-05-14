@@ -7,7 +7,7 @@ use Cake\Event\Event;
 class AppController extends Controller
 {
 
-    use \Crud\Controller\ControllerTrait;
+    //use \Crud\Controller\ControllerTrait;
 
     public function initialize(): void
     {
@@ -16,8 +16,8 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
 
-        $this->loadComponent('Authentication.Authentication');
-        $this->loadComponent('Crud.Crud', [
+        //$this->loadComponent('Authentication.Authentication');
+        /*$this->loadComponent('Crud.Crud', [
             'actions' => [
                 'Crud.Index',
                 'Crud.View',
@@ -32,7 +32,8 @@ class AppController extends Controller
             ]
         ]);
 
-        $this->loadComponent('RequestHandler');
+        */
+
         $this->loadComponent('Auth', [
             'storage' => 'Memory',
             'authenticate' => [
